@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int upperbound(vector<int>& arr, int x) {
+    int low = 0, high = arr.size() - 1;
+    int ans = arr.size();
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (arr[mid] > x) {
+            ans = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int Countsmallequal(vector<vector<int>>& matrix, int x) {
+    int count = 0;
+    for (int i = 0; i < matrix.size(); i++) {
+        count += upperbound(matrix[i], x);
+    }
+    return count;
+}
+
+int Median(vector<vector<int>>& matrix, int n, int m) {
+    int low = INT_MAX, high = INT_MIN;
+    for (int i = 0; i < n; i++) {
+        low = min(low, matrix[i][0]);
+        high = max(high, matrix[i][m - 1]);
+    }
+    int req = (n * m + 1) / 2; // Median position
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+        int smallequal = Countsmallequal(matrix, mid);
+        if (smallequal < req)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+    return low;
+}

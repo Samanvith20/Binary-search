@@ -1,0 +1,44 @@
+#include <vector>
+#include <climits> // Include the header for INT_MAX
+
+int findKRotation(std::vector<int> &arr) {
+    int low = 0, high = arr.size() - 1;
+    int ans = INT_MAX;
+    int index = -1;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+
+        // If the search space is already sorted, arr[low] will always be the minimum in that search space:
+        if (arr[low] <= arr[high]) {
+            if (arr[low] < ans) {
+                index = low;
+                ans = arr[low];
+            }
+        }
+
+        // If left part is sorted:
+        if (arr[low] <= arr[mid]) {
+            // Keep the minimum:
+            if (arr[low] < ans) {
+                index = low;
+                ans = arr[low];
+            }
+
+            // Eliminate left half:
+            low = mid + 1;
+        } else { // If right part is sorted:
+
+            // Keep the minimum:
+            if (arr[mid] < ans) {
+                index = mid;
+                ans = arr[mid];
+            }
+
+            // Eliminate right half:
+            high = mid - 1;
+        }
+    }
+
+    return index;
+}
